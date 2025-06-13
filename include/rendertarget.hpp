@@ -9,9 +9,9 @@ class RenderTarget {
 public:
     RenderTarget(int w, int h);
 
-    int getWidth() const;
-    int getHeight() const;
-    rast::float2 getSize() const;
+    [[nodiscard]] int getWidth() const;
+    [[nodiscard]] int getHeight() const;
+    [[nodiscard]] rast::float2 getSize() const;
 
     void clearScreen();
 

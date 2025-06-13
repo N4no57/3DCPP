@@ -11,7 +11,7 @@ namespace rast {
 
 
         Camera();
-        Camera(float fov, rast::Transform transform);
+        Camera(float fov, const rast::Transform &transform);
     };
 }
 

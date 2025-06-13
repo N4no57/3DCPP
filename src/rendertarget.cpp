@@ -2,8 +2,8 @@
 #include <chrono>
 #include <iostream>
 
-RenderTarget::RenderTarget(int w, int h) : width(w), height(h) {
-    size = rast::float2(width, height);
+RenderTarget::RenderTarget(const int w, const int h) : width(w), height(h) {
+    size = rast::float2(static_cast<float>(width), static_cast<float>(height));
     farClipPlane = 50.f;
 
     colourBuffer.resize(width * height);
@@ -23,9 +23,9 @@ rast::float2 RenderTarget::getSize() const {
 }
 
 void RenderTarget::clearScreen() {
-    auto start = std::chrono::high_resolution_clock::now();
-    std::fill(colourBuffer.begin(), colourBuffer.end(), rast::Pixel(0, 0, 0));
-    std::fill(depthBuffer.begin(), depthBuffer.end(), farClipPlane);
-    auto end = std::chrono::high_resolution_clock::now();
+    const auto start = std::chrono::high_resolution_clock::now();
+    std::ranges::fill(colourBuffer, rast::Pixel(0, 0, 0));
+    std::ranges::fill(depthBuffer, farClipPlane);
+    const auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Clear Screen time: " << std::chrono::duration<float, std::milli>(end - start).count() << "ms\n";
 }

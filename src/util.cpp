@@ -2,12 +2,12 @@
 #include <random>
 
 namespace rast {
-    float2 randomFloat2(int min, int max) {
+    float2 randomFloat2(const int min, const int max) {
         static std::random_device rd;
         static std::mt19937 gen(rd());
 
-        std::uniform_real_distribution<float> distX(0.0f, min);
-        std::uniform_real_distribution<float> distY(0.0f, max);
+        std::uniform_real_distribution<float> distX(0.0f, static_cast<float>(min));
+        std::uniform_real_distribution<float> distY(0.0f, static_cast<float>(max));
 
         return { distX(gen), distY(gen) };
     }

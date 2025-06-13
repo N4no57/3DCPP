@@ -19,16 +19,16 @@ namespace rast {
         return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
     }
 
-    float3 float3::normalize() {
-        float magnitude = this->magnitude();
+    float3 float3::normalize() const {
+        const float magnitude = this->magnitude();
         if (magnitude == 0.0f) {
             return float3(0.0f, 0.0f, 0.0f);
         }
         return { x / magnitude, y / magnitude, z / magnitude };
     }
 
-    float toRadians(float degrees) {
-        return degrees * (M_PI / 180.f);
+    float toRadians(const float degrees) {
+        return M_PI / 180.f * degrees;
     }
 
 
@@ -96,33 +96,33 @@ namespace rast {
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool pointInTriangle(float2 a, float2 b, float2 c, float2 p, float3& weights) {
-        float areaABP = signedTriangleArea(a, b, p);
-        float areaBCP = signedTriangleArea(b, c, p);
-        float areaCAP = signedTriangleArea(c, a, p);
-        bool inTri = areaABP >= 0 && areaBCP >= 0 && areaCAP >= 0;
+    bool pointInTriangle(const float2 a, const float2 b, const float2 c, const float2 p, float3& weights) {
+        const float areaABP = signedTriangleArea(a, b, p);
+        const float areaBCP = signedTriangleArea(b, c, p);
+        const float areaCAP = signedTriangleArea(c, a, p);
+        const bool inTri = areaABP >= 0 && areaBCP >= 0 && areaCAP >= 0;
 
-        float totalArea = areaABP + areaBCP + areaCAP;
-        float invAreaSum = 1 / totalArea;
-        float weightA = areaBCP * invAreaSum;
-        float weightB = areaCAP * invAreaSum;
-        float weightC = areaABP * invAreaSum;
+        const float totalArea = areaABP + areaBCP + areaCAP;
+        const float invAreaSum = 1 / totalArea;
+        const float weightA = areaBCP * invAreaSum;
+        const float weightB = areaCAP * invAreaSum;
+        const float weightC = areaABP * invAreaSum;
         weights = {weightA, weightB, weightC};
 
         return inTri && totalArea > 0;
     }
 
-    float signedTriangleArea(float2 a, float2 b, float2 c) {
-        float2 ac = c - a;
-        float2 abPerp = ac.perpendicular();
+    float signedTriangleArea(const float2 a, const float2 b, const float2 c) {
+        const float2 ac = c - a;
+        const float2 abPerp = ac.perpendicular();
         return ac.dot(abPerp) / 2;
     }
 
-    float orient2D(float2 a, float2 b, float2 c) {
+    float orient2D(const float2 a, const float2 b, const float2 c) {
         return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
     }
 
-    float3 computeBarycentrics(float w0, float w1, float w2, float area, float invArea) {
+    float3 computeBarycentrics(const float w0, const float w1, const float w2, const float invArea) {
         return {w0 * invArea, w1 * invArea, w2 * invArea};
     }
 }

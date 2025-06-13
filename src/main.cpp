@@ -1,3 +1,4 @@
+#include <utility>
 #include <vector>
 #include "../include/math.hpp"
 #include "../include/util.hpp"
@@ -15,20 +16,20 @@ int toAspectRatio(int height) {
 //float3(0.992156862745,0.862745098039, 0.341176470588)
 
 rast::Model generateModel(std::string objFile) {
-    auto modelPoints = rast::loadObjectFile(objFile);
+    const auto modelPoints = rast::loadObjectFile(std::move(objFile));
     std::vector<rast::Pixel> triangleCols;
     triangleCols.resize(modelPoints.size() / 3);
-    for (int i = 0; i < triangleCols.size(); i++) {
-        triangleCols[i] = rast::randomColour();
+    for (auto & triangleCol : triangleCols) {
+        triangleCol = rast::randomColour();
     }
 
-    rast::Model model(modelPoints, triangleCols);
+    const rast::Model model(modelPoints, triangleCols);
     return model;
 }
 
 void CreateTestImage()
 {
-    const int height = 720;
+    constexpr int height = 720;
     const int width = toAspectRatio(height);
 
     Scene scene;

@@ -4,8 +4,8 @@ namespace rast {
     struct float2 {
         float x{}, y{};
 
-        float dot(float2 A) const;
-        float2 perpendicular() const;
+        [[nodiscard]] float dot(float2 A) const;
+        [[nodiscard]] float2 perpendicular() const;
     };
 
     struct float3
@@ -16,9 +16,9 @@ namespace rast {
         float g = y;
         float b = z;
 
-        float dot(float3 A) const;
-        float magnitude() const;
-        float3 normalize();
+        [[nodiscard]] float dot(float3 A) const;
+        [[nodiscard]] float magnitude() const;
+        [[nodiscard]] float3 normalize() const;
     };
 
     struct int3 {
@@ -62,5 +62,5 @@ namespace rast {
     bool pointInTriangle(float2 a, float2 b, float2 c, float2 p, float3& weights);
     float signedTriangleArea(float2 a, float2 b, float2 c);
     float orient2D(float2 a, float2 b, float2 c);
-    float3 computeBarycentrics(float a, float b, float c, float area, float invArea);
+    float3 computeBarycentrics(float a, float b, float c, float invArea);
 }

@@ -23,13 +23,13 @@ namespace rast {
         return result;
     }
 
-    auto split(std::string str, std::string delimiter) {
+    auto split(const std::string &str, const std::string &delimiter) {
         std::vector<std::string> result;
         std::string buff;
 
         for (int i = 0; i < str.size(); i++) {
             if (str[i] == delimiter[0] || i == str.size() - 1) {
-                if (buff == "") {
+                if (buff.empty()) {
                     continue;
                 }
 
@@ -43,48 +43,45 @@ namespace rast {
         return result;
     }
 
-    auto to_float(std::vector<std::string> input) {
+    auto to_float(const std::vector<std::string> &input) {
         std::vector<float> result;
 
-        for (int i = 0; i < input.size(); i++) {
-            result.push_back(atof(input[i].c_str()));
+        for (const auto & i : input) {
+            result.push_back(atof(i.c_str()));
         }
 
         return result;
     }
 
-    auto to_int(std::vector<std::string> input) {
+    auto to_int(const std::vector<std::string> &input) {
         std::vector<int> result;
 
-        for (int i = 0; i < input.size(); i++) {
-            result.push_back(atoi(input[i].c_str()));
+        for (const auto & i : input) {
+            result.push_back(atoi(i.c_str()));
         }
 
         return result;
     }
 
-    std::vector<float3> loadObjectFile(std::string filename) {
+    std::vector<float3> loadObjectFile(const std::string &filename) {
         std::vector<float3> allPoints;
         std::vector<float3> trianglePoints;
 
         std::fstream f;
         f.open(filename, std::ios::in);
-        std::filebuf* buf = f.rdbuf();
 
-        auto lines = splitByLine(f);
-
-        for (int i = 0; i < lines.size(); i++) {
-            if (lines[i].starts_with("v ")) {
-                lines[i].replace(lines[i].find("v "), 2, "");
-                std::vector<float> axes = to_float(split(lines[i], " "));
+        for (auto lines = splitByLine(f); auto & line : lines) {
+            if (line.starts_with("v ")) {
+                line.replace(line.find("v "), 2, "");
+                std::vector<float> axes = to_float(split(line, " "));
                 allPoints.push_back(float3(axes[0], axes[1], axes[2]));
-            } else if (lines[i].starts_with("f ")) {
-                lines[i].replace(lines[i].find("f "), 2, "");
-                std::vector<std::string> faceIndexGroups = split(lines[i], " ");
+            } else if (line.starts_with("f ")) {
+                line.replace(line.find("f "), 2, "");
+                std::vector<std::string> faceIndexGroups = split(line, " ");
 
                 for (int j = 0; j < faceIndexGroups.size(); j++) {
                     std::vector<int> indexGroup = to_int(split(faceIndexGroups[j], "/"));
-                    int pointIndex = indexGroup[0] - 1;
+                    const int pointIndex = indexGroup[0] - 1;
                     if (j >= 3) trianglePoints.push_back(trianglePoints[trianglePoints.size() - (3 * j - 6)]);
                     if (j >= 3) trianglePoints.push_back(trianglePoints[trianglePoints.size() - 2]);
                     trianglePoints.push_back(allPoints[pointIndex]);

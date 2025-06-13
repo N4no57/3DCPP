@@ -13,15 +13,15 @@ namespace rast {
         float3 position;
         float3 scale;
 
-        float3 ToWorldPoint(float3 p) const;
-        float3 ToLocalPoint(float3 worldPoint) const;
+        [[nodiscard]] float3 ToWorldPoint(float3 p) const;
+        [[nodiscard]] float3 ToLocalPoint(const float3 &worldPoint) const;
 
-        std::tuple<float3, float3, float3> GetInverseBasisVectors() const;
+        [[nodiscard]] std::tuple<float3, float3, float3> GetInverseBasisVectors() const;
 
-        std::tuple<float3, float3, float3> GetBasisVectors() const;
+        [[nodiscard]] std::tuple<float3, float3, float3> GetBasisVectors() const;
 
-        static float3 TransformVector(float3 ihat, float3 jhat, float3 khat, float3 v);
-        float3 scaleVector(float3 p) const;
+        static float3 TransformVector(const float3 &ihat, const float3 &jhat, const float3 &khat, const float3 &v);
+        [[nodiscard]] float3 scaleVector(float3 p) const;
 
         void update();
 

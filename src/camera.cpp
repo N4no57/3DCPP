@@ -5,6 +5,5 @@ namespace rast {
         fov = rast::toRadians(60);
         transform = rast::Transform();
     }
-
-    Camera::Camera(float fov, rast::Transform transform): fov(fov), transform(transform) {}
+    Camera::Camera(const float fov, const rast::Transform &transform): fov(fov), transform(transform) {}
 }

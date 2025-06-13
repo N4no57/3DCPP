@@ -8,21 +8,21 @@
 #include <bits/stl_algo.h>
 
 void needUpdate(std::vector<rast::Model> &models) {
-    for (int i = 0; i < models.size(); i++) {
-        models[i].needsUpdate = true;
+    for (auto & model : models) {
+        model.needsUpdate = true;
     }
 }
 
-void Scene::addModel(rast::Model model) {
+void Scene::addModel(const rast::Model &model) {
     models.push_back(model);
 }
 
-void Scene::handleInput(RenderTarget &target, float deltaTime) {
-    float camSpeed = 1.5f;
-    float camSensitivity = 2.f;
+void Scene::handleInput(const RenderTarget &target, const float deltaTime) {
+    constexpr float camSpeed = 1.5f;
+    constexpr float camSensitivity = 2.f;
 
     rast::float2 mouseDelta = {GetMouseDelta().x, GetMouseDelta().y};
-    mouseDelta = mouseDelta / target.getWidth() * camSensitivity;
+    mouseDelta = mouseDelta / static_cast<float>(target.getWidth()) * camSensitivity;
     if (mouseDelta.x != 0 || mouseDelta.y != 0) {
      needUpdate(models);
     }
@@ -62,7 +62,7 @@ void Scene::handleInput(RenderTarget &target, float deltaTime) {
     camera.transform.position += moveDelta.normalize() * camSpeed * deltaTime;
 }
 
-void Scene::update(RenderTarget &target, float deltaTime) {
+void Scene::update(RenderTarget &target, const float deltaTime) {
     target.clearScreen();
 
     models[0].transform.pitch += rast::toRadians(45) * deltaTime;
@@ -71,7 +71,7 @@ void Scene::update(RenderTarget &target, float deltaTime) {
     handleInput(target, deltaTime);
 }
 
-Scene::Scene(std::vector<rast::Model> models) : models(models) {}
+Scene::Scene(const std::vector<rast::Model> &models) : models(models) {}
 
 Scene::Scene() = default;
 
